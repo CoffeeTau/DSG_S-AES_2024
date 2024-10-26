@@ -192,7 +192,9 @@ def meet_in_the_middle_attack(plaintext, ciphertext):
         decrypt_dict[intermediate_str] = k2
 
     # 查找相同的中间结果
+    i = 0 # 尝试次数
     for intermediate_str in encrypt_dict:
+        i += 1
         if intermediate_str in decrypt_dict:
             k1 = encrypt_dict[intermediate_str]
             k2 = decrypt_dict[intermediate_str]
@@ -205,7 +207,7 @@ def meet_in_the_middle_attack(plaintext, ciphertext):
             time_use = end_time - start_time
 
             print("执行中间相遇攻击所需时间:", time_use)
-            return k1, k2, time_use
+            return k1, k2, time_use, i
 
     print("未找到匹配的密钥对")
     return None, None,
