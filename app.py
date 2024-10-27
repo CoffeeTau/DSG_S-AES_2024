@@ -1,4 +1,9 @@
+import re
+
 import numpy as np
+from cryptography.hazmat.primitives import padding
+from cryptography.hazmat.primitives.ciphers.algorithms import AES
+
 from GF2N import GF2N
 from utils import decimalToNpBinary
 import time
@@ -441,103 +446,112 @@ def reset_variable():
     return jsonify(message="Global variable reset to 0")  # 返回清零状态
 
 # CBC -------------------------------------------------------------------------
+# 实现一个简单的16-bit CBC模式加密函数
+def xor(bits1, bits2):
+    """对两个二进制字符串进行按位异或操作"""
+    return ''.join(['0' if bits1[i] == bits2[i] else '1' for i in range(len(bits1))])
+
+
+def saes_encrypt(plaintext, key):
+    """一个简单的SAES加密函数（占位）"""
+    return ''.join(reversed(plaintext))
+
+
+def saes_decrypt(ciphertext, key):
+    """一个简单的SAES解密函数（占位）"""
+    return ''.join(reversed(ciphertext))
+
+
+def cbc_encrypt(plaintext, key, iv):
+    block_size = 16
+
+    key_array = np.array([int(bit) for bit in key])
+    saes = SAES(key_array)
+
+    if len(plaintext) % block_size != 0:
+        padding_length = block_size - (len(plaintext) % block_size)
+        plaintext = plaintext + '0' * padding_length
+
+    ciphertext = ""
+    prev_block = iv
+
+    for i in range(0, len(plaintext), block_size):
+        block = plaintext[i:i + block_size]
+        block = xor(block, prev_block)
+
+        # 在使用 saes.encrypt 前将 block 转换为 NumPy 数组
+        block_np = np.array([int(bit) for bit in block])  # 转换为01的NumPy数组
+        encrypted_block = saes.encrypt(block_np)
+        encrypted_block = ''.join(map(str, encrypted_block))
+
+        # encrypted_block = saes_encrypt(block, key)
+
+        ciphertext += encrypted_block
+        prev_block = encrypted_block
+
+    return ciphertext
+
+
+def cbc_decrypt(ciphertext, key, iv):
+    """实现CBC模式解密"""
+    block_size = 16
+    key_array = np.array([int(bit) for bit in key])
+    saes = SAES(key_array)
+    plaintext = ""
+    prev_block = iv
+
+    for i in range(0, len(ciphertext), block_size):
+        block = ciphertext[i:i + block_size]
+
+        block_np = np.array([int(bit) for bit in block])
+        decrypted_block = saes.decrypt(block_np)
+        decrypted_block = ''.join(map(str, decrypted_block))
+
+        # decrypted_block = saes_decrypt(block, key)
+
+        plaintext_block = xor(decrypted_block, prev_block)
+        plaintext += plaintext_block
+        prev_block = block  # 更新前一个密文块
+
+    return plaintext.rstrip('0')  # 移除填充的0
+
+
 @app.route('/cbc_encrypt', methods=['POST'])
-def cbc_encrypt():
-    # 获取请求中的数据
-    data = request.get_json()
-    plaintext = data.get("plaintext")  # 明文
-    key1 = data.get("key1")  # 密钥
-    iv = data.get("iv")  # IV 向量
-    output_format = data.get("format")  # 输出格式（bit 或 ASCII）
+def encrypt():
+    plaintext = request.form.get('plaintext')
+    key = request.form.get('key1')
+    iv = request.form.get('ivInput')
 
-    # 检查输入是否有效
-    if not plaintext or not key1 or not iv:
-        return jsonify(error="请输入明文、密钥和IV"), 400
+    if not re.match(r'^[01]+$', plaintext):
+        return jsonify({'error': '明文应为二进制格式（仅包含0和1）'}), 400
+    if not re.match(r'^[01]{16}$', key):
+        return jsonify({'error': '密钥应为16位二进制格式'}), 400
+    if not re.match(r'^[01]{16}$', iv):
+        return jsonify({'error': 'IV应为16位二进制格式'}), 400
 
-    # 确保密钥和 IV 是 16 字节
-    if len(key1) != 16 or len(iv) != 16:
-        return jsonify(error="密钥和 IV 必须为16字节 (128位)"), 400
-
-    # 将明文转为字节类型（这里假设明文是 ASCII 格式）
-    plaintext_bytes = plaintext.encode('utf-8')
-    key_bytes = key1.encode('utf-8')
-    iv_bytes = iv.encode('utf-8')
-
-    # 使用 AES CBC 模式进行加密
-    try:
-        cipher = Cipher(algorithms.AES(key_bytes), modes.CBC(iv_bytes), backend=default_backend())
-        encryptor = cipher.encryptor()
-
-        # 使用 PKCS7 填充明文到 16 字节的倍数
-        pad_len = 16 - len(plaintext_bytes) % 16
-        padded_plaintext = plaintext_bytes + bytes([pad_len] * pad_len)
-
-        ciphertext = encryptor.update(padded_plaintext) + encryptor.finalize()
-
-        # 根据用户选择的输出格式决定密文编码
-        if output_format == "bit":
-            # 转换为二进制 01 串
-            ciphertext_output = ''.join(format(byte, '08b') for byte in ciphertext)
-        elif output_format == "ASCII":
-            # 转换为 Base64 编码
-            ciphertext_output = base64.b64encode(ciphertext).decode('utf-8')
-        else:
-            return jsonify(error="无效的输出格式"), 400
-    except Exception as e:
-        return jsonify(error=f"加密错误: {str(e)}"), 500
-
-    # 返回加密结果
-    return jsonify(result=ciphertext_output)
+    ciphertext = cbc_encrypt(plaintext, key, iv)
+    return jsonify({'ciphertext': ciphertext})
 
 
 @app.route('/cbc_decrypt', methods=['POST'])
-def cbc_decrypt():
-    try:
-        # 获取请求中的数据
-        data = request.get_json()
-        ciphertext = data.get("ciphertext")  # 密文
-        key1 = data.get("key1")              # 密钥
-        iv = data.get("iv")                  # IV 向量
-        output_format = data.get("format")   # 密文格式（bit 或 ASCII）
+def decrypt():
+    ciphertext = request.form.get('ciphertext')
+    key = request.form.get('key1')
+    iv = request.form.get('ivInput')
 
-        # 检查输入是否有效
-        if not ciphertext or not key1 or not iv:
-            return jsonify(error="请输入密文、密钥和IV"), 400
+    if not re.match(r'^[01]+$', ciphertext):
+        return jsonify({'error': '密文应为二进制格式（仅包含0和1）'}), 400
+    if not re.match(r'^[01]{16}$', key):
+        return jsonify({'error': '密钥应为16位二进制格式'}), 400
+    if not re.match(r'^[01]{16}$', iv):
+        return jsonify({'error': 'IV应为16位二进制格式'}), 400
 
-        # 确保密钥和 IV 是 16 字节
-        if len(key1) != 16 or len(iv) != 16:
-            return jsonify(error="密钥和 IV 必须为16字节 (128位)"), 400
+    plaintext = cbc_decrypt(ciphertext, key, iv)
+    return jsonify({'plaintext': plaintext})
 
-        # 处理密文格式
-        if output_format == "bit":
-            # 如果密文是 01 串
-            ciphertext_bytes = int(ciphertext, 2).to_bytes((len(ciphertext) + 7) // 8, byteorder='big')
-        elif output_format == "ASCII":
-            # 如果密文是 Base64 编码
-            ciphertext_bytes = base64.b64decode(ciphertext)
-        else:
-            return jsonify(error="无效的密文格式"), 400
 
-        # 转换密钥和 IV 为字节类型
-        key_bytes = key1.encode('utf-8')
-        iv_bytes = iv.encode('utf-8')
 
-        # 使用 AES CBC 模式进行解密
-        cipher = Cipher(algorithms.AES(key_bytes), modes.CBC(iv_bytes), backend=default_backend())
-        decryptor = cipher.decryptor()
-        padded_plaintext = decryptor.update(ciphertext_bytes) + decryptor.finalize()
 
-        # 移除 PKCS7 填充
-        pad_len = padded_plaintext[-1]
-        plaintext_bytes = padded_plaintext[:-pad_len]
-
-        # 将明文转换为字符串
-        plaintext = plaintext_bytes.decode('utf-8')
-        return jsonify(result=plaintext)
-
-    except Exception as e:
-        print("解密时发生错误:", str(e))  # 在控制台中输出详细错误信息
-        return jsonify(error=f"解密错误: {str(e)}"), 500
 
 
 

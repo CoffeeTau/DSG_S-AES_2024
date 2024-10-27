@@ -465,7 +465,7 @@
             <div class="col-lg-6 encryption-container"> <!-- 左侧框 -->
               <h4 class="encryption_section_title">S-AES加解密</h4>
               <h4 class="encryption_label">明文/密文</h4>
-              <textarea class="encryption_textarea" id="plaintext" placeholder="请输入明文" rows="4"></textarea>
+              <textarea class="encryption_textarea" id="plaintext" placeholder="请输入明文/密文" rows="4"></textarea>
 
               <h4 class="encryption_label">明文/密文类型</h4>
               
@@ -495,12 +495,12 @@
                   <a class="encryption_button" href="javascript:void(0)" id="singleEncrypt" onclick="singleEncryption()"><b>单次加密</b></a>
                   <a class="encryption_button" href="javascript:void(0)" id="doubleEncrypt" onclick="doubleEncryption()"><b>双重加密</b></a>
                   <a class="encryption_button" href="javascript:void(0)" id="tripleEncrypt" onclick="tripleEncryption()"><b>三重加密</b></a>
-                  <a class="encryption_button" href="javascript:void(0)" id="cbcEncrypt" onclick="cbcEncryption()"><b>CBC加密</b></a>
+                  <a class="encryption_button" href="javascript:void(0)" onclick="cbcEncrypt()"><b>CBC加密</b></a>
                 </div>
               </div>
       
               <h4 class="encryption_label">生成的密文</h4>
-              <textarea class="encryption_ciphertext_textarea" id="ciphertextLabel" readonly></textarea>
+              <textarea class="encryption_ciphertext_textarea" id="ciphertextLabel" ></textarea>
 
               
               <!-- 新增解密按钮 -->
@@ -510,7 +510,7 @@
                   <a class="encryption_button" href="javascript:void(0)" id="singleDecrypt" onclick="singleDecryption()"><b>单次解密</b></a>
                   <a class="encryption_button" href="javascript:void(0)" id="doubleDecrypt" onclick="doubleDecryption()"><b>双重解密</b></a>
                   <a class="encryption_button" href="javascript:void(0)" id="tripleDecrypt" onclick="tripleDecryption()"><b>三重解密</b></a>
-                  <a class="encryption_button" href="javascript:void(0)" id="cbcDecrypt" onclick="cbcDecryption()"><b>CBC解密</b></a>
+                  <a class="encryption_button" href="javascript:void(0)"  onclick="cbcDecrypt()"><b>CBC解密</b></a>
                 </div>
               </div>
               
@@ -720,6 +720,50 @@
       <script src="/static/js/popup.js"></script>
       <script src="/static/js/custom.js"></script>
       <script src = "/static/js/encryption.js"></script>
+
+        <script>
+        function cbcEncrypt() {
+            const plaintext = $('#plaintext').val();
+            const key = $('#key1').val();
+            const iv = $('#ivInput').val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/cbc_encrypt',
+                data: { plaintext: plaintext, key1: key, ivInput: iv },
+                success: function(response) {
+                    $('#ciphertextLabel').val(response.ciphertext);
+                },
+                error: function(xhr) {
+                    alert(xhr.responseJSON.error);
+                }
+            });
+        }
+
+        function cbcDecrypt() {
+            const ciphertext = $('#plaintext').val();
+            const key = $('#key1').val();
+            const iv = $('#ivInput').val();
+
+            // 调试输出，检查是否获取到了这些值
+            console.log("Ciphertext for decryption:", ciphertext);
+            console.log("Key for decryption:", key);
+            console.log("IV for decryption:", iv);
+
+            $.ajax({
+                type: 'POST',
+                url: '/cbc_decrypt',
+                data: { ciphertext: ciphertext, key1: key, ivInput: iv },
+                success: function(response) {
+                    $('#decryptedPlaintextLabel').val(response.plaintext);
+                },
+                error: function(xhr) {
+                    alert(xhr.responseJSON.error);
+                }
+            });
+        }
+    </script>
+
     </div>
   </div>
 </body>

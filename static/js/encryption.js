@@ -597,34 +597,27 @@ function cbcEncryption() {
 }
 
 
-// CBC解密 -----------------------------------------------------------------------------------------------------
+// CBC解密 --------------------------------------------------------------------------
 function cbcDecryption() {
-    console.log("CBC解密函数被调用");
-
-    // 获取输入的 IV、密钥1 和密文
+    // 获取输入的 IV、密钥1、明文
     const iv = document.getElementById("ivInput").value;
     const key1 = document.getElementById("key1").value;
-    let ciphertext = document.getElementById("ciphertextLabel").value;
+    const plaintext = document.getElementById("plaintext").value;
 
-    // 移除“密文: ”前缀（如果存在）
-    if (ciphertext.startsWith("密文: ")) {
-        ciphertext = ciphertext.replace("密文: ", "").trim();
-    }
-
-    // 获取用户选择的密文格式
+    // 获取用户选择的输出格式
     const selectedFormat = document.querySelector('input[name="n1"]:checked');
 
     // 检查是否选择了格式
     if (!selectedFormat) {
-        alert("请选择密文格式（bit 或 ASCII）");
+        alert("请选择输出格式（bit 或 ASCII）");
         return;
     }
 
     const format = selectedFormat.value;
 
     // 检查输入是否为空
-    if (!iv || !key1 || !ciphertext) {
-        alert("请填写完整的 IV、密钥1 和密文");
+    if (!iv || !key1 || !plaintext) {
+        alert("请填写完整的 IV、密钥1 和明文");
         return;
     }
 
@@ -637,8 +630,8 @@ function cbcDecryption() {
         body: JSON.stringify({
             iv: iv,
             key1: key1,
-            ciphertext: ciphertext,
-            format: format  // 将密文格式发送给后端
+            plaintext: plaintext,
+            format: format  // 将输出格式发送给后端
         })
     })
     .then(response => {
@@ -651,15 +644,17 @@ function cbcDecryption() {
         if (data.error) {
             alert(data.error);
         } else {
-            console.log('CBC解密结果:', data.result); // 检查解密结果是否正确
-            // 显示解密结果在指定的 textarea 中
-            document.getElementById("decryptedPlaintextLabel").value = `明文: ${data.result}`;
+            console.log('CBC加密结果:', data.result);
+            // 显示加密结果在指定的标签中
+            document.getElementById("decryptedPlaintextLabel").textContent = `密文: ${data.result}`;
         }
     })
     .catch(error => {
         console.error('Error:', error);
     });
 }
+
+
 
 
 
