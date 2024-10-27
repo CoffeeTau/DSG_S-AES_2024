@@ -25,7 +25,6 @@
 
 <br>
 
-![](images/task1.png)
 
 
 
