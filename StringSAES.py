@@ -1,5 +1,4 @@
 import numpy as np
-import base64
 from SAES import SAES
 
 class StringSAES:
@@ -7,68 +6,54 @@ class StringSAES:
         self.saes = SAES(key)
 
     def padString(self, s):
-        
-        padding_length = 2 - (len(s) % 2)
-        padding_char = chr(padding_length).encode('utf-8')
-        return s.encode('utf-8') + padding_char * padding_length
-
-    def unpadString(self, s):
-        
-        padding_length = s[-1]
-        return s[:-padding_length].decode('utf-8')
+        """填充字符串，使其长度为16的倍数"""
+        while len(s) % 2 != 0:  # 确保是16位的倍数
+            s += '\0'  # 用空字符填充
+        return s
 
     def encryptString(self, s):
-        
-        padded_s = self.padString(s)
-        encrypted_array = []
+        s = self.padString(s)
+        encrypted_binary = ''
+        for i in range(0, len(s), 2):  # 每次处理两个字符（16位）
+            block = np.array(list(map(int, ''.join(format(ord(c), 'b').zfill(8) for c in s[i:i + 2]))), dtype=np.uint8)
+            encrypted_block = self.saes.encrypt(block)
+            encrypted_binary += ''.join(str(b) for b in encrypted_block)
 
-        for i in range(0, len(padded_s), 2):
-            
-            block = padded_s[i:i + 2]
-            block_bits = np.array([int(bit) for byte in block for bit in format(byte, '08b')])
-
-            if block_bits.size != 16:
-                raise ValueError("Block size should be 16 bits.")
-
-            encrypted_block = self.saes.encrypt(block_bits)
-            encrypted_array.extend(encrypted_block)
-
-        encrypted_bytes = int(''.join(map(str, encrypted_array)), 2).to_bytes(len(encrypted_array) // 8, byteorder='big')
-        
-        encrypted_string = base64.b64encode(encrypted_bytes).decode('utf-8')
-        return encrypted_string
+        # 将二进制转换为字符串
+        encrypted_chars = []
+        for i in range(0, len(encrypted_binary), 8):
+            num = int(encrypted_binary[i:i + 8], 2)
+            encrypted_chars.append(chr(num))
+        return ''.join(encrypted_chars)
 
     def decryptString(self, s):
+        # 调用填充函数以确保长度为偶数
+        s = self.padString(s)
 
-        encrypted_bytes = base64.b64decode(s)
-        
-        s_bits = [int(bit) for bit in ''.join(format(byte, '08b') for byte in encrypted_bytes)]
-        decrypted_array = []
-
-        for i in range(0, len(s_bits), 16):
-           
-            block = np.array(s_bits[i:i + 16])
-
-            if block.size != 16:
-                raise ValueError("Block size should be 16 bits.")
-
+        decrypted_binary = ''
+        for i in range(0, len(s), 2):  # 每次处理两个字符（16位）
+            block = np.array(list(map(int, ''.join(format(ord(c), 'b').zfill(8) for c in s[i:i + 2]))), dtype=np.uint8)
             decrypted_block = self.saes.decrypt(block)
-            decrypted_array.extend(decrypted_block)
+            decrypted_binary += ''.join(str(b) for b in decrypted_block)
 
-        decrypted_bytes = int(''.join(map(str, decrypted_array)), 2).to_bytes(len(decrypted_array) // 8, byteorder='big')
+        decrypted_chars = []
+        for i in range(0, len(decrypted_binary), 8):
+            num = int(decrypted_binary[i:i + 8], 2)
+            decrypted_chars.append(chr(num))
 
-        return self.unpadString(decrypted_bytes)
+        return ''.join(decrypted_chars).rstrip('\0')  # 去除填充的空字符
+
 
 if __name__ == "__main__":
-
-    key = np.array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+    key = np.array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0])  # 16位密钥
     encryptor = StringSAES(key)
-    
-    plaintext = "Hello, SAES!"
+
+    plaintext = "5/÷Æ+"
     print("Original plaintext:", plaintext)
 
     encrypted = encryptor.encryptString(plaintext)
-    print("Encrypted:", encrypted)
+    print("Encrypted (as string):", encrypted)
 
-    decrypted = encryptor.decryptString(encrypted)
+    user_input = input("Enter a string to decrypt: ")
+    decrypted = encryptor.decryptString(user_input)
     print("Decrypted:", decrypted)

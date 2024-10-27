@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset='utf-8'>
+  <title>我的网页 - htmlpage.cn</title>
+<!--  <link rel="stylesheet" href="css/circle-data.css">-->
+</head>
+
+<body>
+  <div>
+    <style>
+
+      .encryption_plaintext_textarea {
+    width: 100%;
+    height: 100px; /* 根据需求调整高度 */
+    resize: none; /* 禁止用户调整大小 */
+    overflow: auto; /* 当内容超出时显示滚动条 */
+    font-size: 14px;
+    padding: 10px;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+
+      .encryption_ciphertext_textarea {
+    width: 100%;
+    height: 100px; /* 根据需求调整高度 */
+    resize: none; /* 禁止用户调整大小 */
+    overflow: auto; /* 当内容超出时显示滚动条 */
+    font-size: 14px;
+    padding: 10px;
+    border: 1px solid #dcdcdc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+
+      .large-number {
+
+    font-size: 45px; /* 数字的大小 */
+    font-weight: bold; /* 增加数字的粗细 */
+        color: #4F9DD9
+}
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin-top: 0px;
+        margin-right: 0px;
+        margin-bottom: 0px;
+        margin-left: 0px;
+        font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Roboto, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei", "Microsoft Jhenghei", sans-serif;
+      }
+
+      .logo path {
+        pointer-events: none;
+        fill: none;
+        stroke-linecap: round;
+        stroke-width: 7;
+        stroke: rgb(255, 255, 255);
+      }
+
+      .wechat-group img {
+        max-width: 220px;
+        height: auto;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        border-bottom-left-radius: 8px;
+        margin-top: 0px;
+        margin-right: auto;
+        margin-bottom: 0px;
+        margin-left: auto;
+        width: 100%;
+      }
+
+      .welcome-img img {
+        width: 100%;
+      }
+
+      [data-aos] {
+        opacity: 1 !important;
+        transform: translate(0px) scale(1) !important;
+      }
+
+      .fdb-block img {
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        border-bottom-left-radius: 4px;
+      }
+
+      .fdb-block .fdb-touch {
+        border-top-width: 5px;
+        border-top-style: solid;
+        border-top-color: rgb(82, 139, 255);
+      }
+
+      .fdb-block .fdb-box {
+        background-image: initial;
+        background-position-x: initial;
+        background-position-y: initial;
+        background-size: initial;
+        background-repeat: initial;
+        background-attachment: initial;
+        background-origin: initial;
+        background-clip: initial;
+        background-color: rgb(255, 255, 255);
+        color: rgb(68, 68, 68);
+        padding-top: 60px;
+        padding-right: 40px;
+        padding-bottom: 60px;
+        padding-left: 40px;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+        border-bottom-left-radius: 4px;
+        box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+        overflow-x: hidden;
+        overflow-y: hidden;
+      }
+
+      .fdb-block h1 {
+        font-size: 1.75rem;
+        margin-bottom: 0.5em;
+        margin-top: 0.3em;
+        font-weight: 400;
+      }
+
+      .fdb-block .text-h3,
+      .fdb-block h3 {
+        font-size: 0.875rem;
+        margin-bottom: 0.5em;
+        margin-top: 0.3em;
+        font-weight: 400;
+      }
+
+      .fdb-block img+h1,
+      .fdb-block img+h2 {
+        margin-top: 40px;
+      }
+
+      a {
+        color: rgb(0, 123, 255);
+        text-decoration-line: none;
+        text-decoration-thickness: initial;
+        text-decoration-style: initial;
+        text-decoration-color: initial;
+        background-color: transparent;
+      }
+
+      a:hover {
+        color: rgb(0, 86, 179);
+        text-decoration-line: underline;
+        text-decoration-thickness: initial;
+        text-decoration-style: initial;
+        text-decoration-color: initial;
+      }
+
+      #header:not(.sticky-header) #logo a {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .c99904 {
+        display: none;
+      }
+
+      .c114105 {
+        float: left;
+        width: 68.7px;
+        en: 1;
+      }
+
+.encryption_section_title {
+  font-size: 20px; /* 标题字体大小 */
+  color: #007bff; /* 标题颜色 */
+  margin-bottom: 15px; /* 下边距 */
+  text-align: center; /* 中心对齐 */
+}
+
+
+.encryption_label {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #007bff;
+  font-size: 16px; /* 更大字体 */
+}
+
+.encryption_textarea,
+.encryption_input {
+  width: calc(100% - 20px);
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.border-button {
+  margin-top: 20px; /* 按钮上方间距 */
+}
+
+.button-group {
+  display: flex; /* 使用 Flexbox 布局 */
+  justify-content: space-between; /* 平均分布 */
+}
+
+.encryption_button {
+  flex: 1; /* 让按钮平分可用空间 */
+  margin: 0 5px; /* 按钮之间的间距 */
+  text-align: center; /* 文本居中 */
+  background-color: #007bff; /* 按钮背景颜色 */
+  color: #fff; /* 按钮文本颜色 */
+  padding: 10px; /* 内边距 */
+  border-radius: 4px; /* 圆角 */
+  text-decoration: none; /* 去掉下划线 */
+  transition: background-color 0.3s; /* 背景颜色过渡效果 */
+}
+
+.encryption_button:hover {
+  background-color: #0056b3; /* 悬停时的背景颜色 */
+}
+
+.encryption-row {
+  display: flex; /* 使用 Flexbox 布局 */
+  justify-content: center; /* 中心对齐 */
+  align-items: stretch; /* 拉伸以对齐高度 */
+  gap: 100px; /* 框之间的间距 */
+  margin-top: 40px; /* 增加顶部外边距 */
+}
+
+.encryption-container {
+  flex: 0 0 45%; /* 左侧框的基础宽度 */
+  border: 1px solid #007bff; /* 边框颜色 */
+  border-radius: 12px; /* 圆角 */
+  padding: 20px; /* 内边距 */
+  background-color: #e7f3ff; /* 浅蓝色背景 */
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+}
+
+.encryption-test-container {
+  flex: 0 0 45%; /* 左侧框的基础宽度 */
+  border: 1px solid #007bff; /* 边框颜色 */
+  border-radius: 12px; /* 圆角 */
+  padding: 20px; /* 内边距 */
+  background-color: #e7f3ff; /* 浅蓝色背景 */
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+}
+
+
+.encryption_radio_group label {
+  margin-right: 15px;
+  font-weight: normal;
+}
+
+
+
+    </style>
+    <div>
+      <link rel="preload" href="/static/img/services-right-dec.png" as="image" crossorigin="" />
+      <link rel="preload" href="/static/img/service-icon-01.png" as="image" crossorigin="" />
+      <link rel="preload" href="/static/img/service-icon-02.png" as="image" crossorigin="" />
+      <link rel="preload" href="/static/img/service-icon-03.png" as="image" crossorigin="" />
+      <link rel="preload" href="/static/img/service-icon-04.png" as="image" crossorigin="" />
+      <link rel="preload" href="/static/img/services-left-dec.png" as="image" crossorigin="" />
+      <link rel="preload" href="/static/img/about-bg.jpg" as="image" crossorigin="" />
+      <link rel="preload" href="/static/img/client-bg.png" as="image" crossorigin="" />
+      <link rel="preload" href="/static/img/regular-table-top.png" as="image" crossorigin="" />
+      <link rel="preload" href="/static/img/service-bg.jpg" as="image" crossorigin="" />
+      <link rel="preload" href="/static/img/service-icon-hover-01.png" as="image" crossorigin="" />
+      <link rel="preload" href="/static/img/service-icon-hover-02.png" as="image" crossorigin="" />
+      <link rel="preload" href="/static/img/service-icon-hover-03.png" as="image" crossorigin="" />
+      <link rel="preload" href="/static/img/service-icon-hover-04.png" as="image" crossorigin="" />
+      <link rel="preload" href="/static/img/regular-table-bottom.png" as="image" crossorigin="" />
+      <link rel="preload" href="/static/img/pro-table-top.png" as="image" crossorigin="" />
+      <link rel="preload" href="/static/img/pro-table-bottom.png" as="image" crossorigin="" />
+      <link rel="preload" href="/static/img/footer-bg.png" as="image" crossorigin="" /><!-- Bootstrap core CSS -->
+      <link href="/static/css/bootstrap.min.css" rel="stylesheet" />
+      <link rel="stylesheet" href="/static/css/templatemo-chain-app-dev.css" />
+      <link rel="stylesheet" href="/static/css/animated.css" />
+      <link rel="stylesheet" href="/static/css/owl.css" /><!-- ***** Header Area Start ***** -->
+      <header data-wow-duration="0.75s" data-wow-delay="0s" class="header-area header-sticky wow slideInDown">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <nav class="main-nav"><!-- ***** Logo Start ***** --><a href="index.html"
+                  class="logo"></a><!-- ***** Logo End ***** --><!-- ***** Menu Start ***** -->
+                <ul class="nav">
+                  <li class="scroll-to-section"><a href="#top" class="active">介绍</a></li>
+                  <li class="scroll-to-section"><a href="#services">服务</a></li>
+                  <li class="scroll-to-section"><a href="#pricing">AES-综合加解密(单重、多重、CBC模式)</a></li>
+                  <li class="scroll-to-section"><a href="#bruteForce">中间相遇攻击</a></li>
+                  <li class="scroll-to-section"><a href="#about">关于我们</a></li>
+                  <li class="scroll-to-section"><a href="#404"></a></li>  
+                </ul><a class="menu-trigger"><span>Menu</span></a><!-- ***** Menu End ***** -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </header><!-- ***** Header Area End ***** -->
+      <div id="modal" class="popupContainer c99904"><!-- Username & Password Login form -->
+        <div class="user_login">
+          <form method="get"><label>Email / Username</label><input type="text" /><br /><label>Password</label><input
+              type="password" /><br />
+            <div class="checkbox"><input type="checkbox" id="remember" /><label for="remember">Remember me on this
+                computer</label></div>
+            <div class="action_btns">
+              <div class="one_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left">
+                  </i> Back</a></div>
+              <div class="one_half last"><a href="#" class="btn btn_red">Login</a></div>
+            </div>
+          </form><a href="#" class="forgot_password">Forgot password?</a>
+        </div><!-- Register Form -->
+        <div class="user_register">
+          <form method="get"><label>Full Name</label><input type="text" /><br /><label>Email Address</label><input
+              type="email" /><br /><label>Password</label><input type="password" /><br />
+            <div class="checkbox"><input type="checkbox" id="send_updates" /><label for="send_updates">Send me
+                occasional email updates</label></div>
+            <div class="action_btns">
+              <div class="one_half"><a href="#" class="btn back_btn"><i class="fa fa-angle-double-left">
+                  </i> Back</a></div>
+              <div class="one_half last"><a href="#" class="btn btn_red">Register</a></div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div id="top" data-wow-duration="1s" data-wow-delay="0.5s" class="main-banner wow fadeIn">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="row">
+                <div class="col-lg-6 align-self-center">
+                  <div data-wow-duration="1s" data-wow-delay="1s"
+                    class="left-content show-up header-text wow fadeInLeft">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <h2>一起来尝试加解密您的信息吧！
+                        </h2>
+                        <p>
+                          本软件基于S-AES（简化的数据加密标准）算法，提供简单易用的界面，让用户能够轻松进行消息的加密和解密。用户只需输入待加密的明文和自定义密钥，即可生成安全的密文。通过解密功能，用户可以使用相同的密钥恢复原始消息。该软件旨在帮助用户理解对称加密的基本原理，同时提高信息安全意识。
+                        </p>
+                      </div>
+                      <div class="col-lg-12">
+                        <div class="white-button first-button scroll-to-section">
+                        </div>
+                        <div class="white-button scroll-to-section">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div data-wow-duration="1s" data-wow-delay="0.5s" class="right-image wow fadeInRight"><img
+                      src="/static/img/slider-dec.png" alt="" /></div> 
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="services" class="services section">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+              <div data-wow-duration="1s" data-wow-delay="0.5s" class="section-heading wow fadeInDown">
+                <h4>为您提供以下服务
+                </h4>
+                <!-- <img src="/static/img/heading-line-dec.png" alt="" /> -->
+                <p>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-3">
+              <a href="#pricing">> 
+              <div class="service-item first-service">
+                <div class="icon">
+                </div>
+                <h4>信息加密
+                </h4>
+                <p>通过S-AES算法对输入的明文消息进行加密，生成密文
+                </p>
+              </a>
+                <div class="text-button">
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <div class="service-item second-service">
+                <a href="#pricing">> 
+                <div class="icon">
+                </div>
+                <h4>信息解密
+                </h4>
+                <p>您可以输入密文，使用相同的密钥进行解密，恢复原始消息。
+                </p>
+                </a>
+                <div class="text-button">
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <div class="service-item third-service">
+                <a href="#newsletter">
+                <div class="icon">
+                </div>
+                <h4>算法S盒设计
+                </h4>
+                <p>使用统计方法评估加密算法混淆和扩散特性，确保安全性
+                </p>
+                </a>
+                <div class="text-button">
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <div class="service-item fourth-service">
+                <a href="#bruteForce">
+                <div class="icon">
+                </div>
+                <h4>中间相遇攻击测试
+                </h4>
+                <p>使用中间相遇攻击测试来了解算法的弱点并分析其安全性
+                </p>
+              </a>
+                <div class="text-button">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+
+
+      <div id="pricing" class="pricing-tables">
+        <div class="section-heading">
+          <div class="htmlpage-cell c114多重加密5">
+            <div></div>
+            <h4 id="iqy8wu" class="c138331">加解密与破解</h4>
+          </div>
+        </div>
+      
+        <div class="container">
+          <div class="encryption-row"> <!-- 更改为 encryption-row -->
+            <div class="col-lg-6 encryption-container"> <!-- 左侧框 -->
+              <h4 class="encryption_section_title">S-AES加解密</h4>
+              <h4 class="encryption_label">明文/密文</h4>
+              <textarea class="encryption_textarea" id="plaintext" placeholder="请输入明文" rows="4"></textarea>
+
+              <h4 class="encryption_label">明文/密文类型</h4>
+              
+              <form method="get" class="radio-form">
+                <div class="radio-container">
+                  <input type="radio" name="n1" id="bit" value="bit">
+                  <label class="radio-label" for="bit">bit</label>
+                </div>
+                <div class="radio-container">
+                  <input type="radio" name="n1" id="ascii" value="ASCII">
+                  <label class="radio-label" for="ascii">ASCII</label>
+                </div>
+              </form>
+
+
+              <h4 class="encryption_label">密钥</h4>
+              <input class="encryption_input" type="text" id="key1" placeholder="请输入密钥1" />
+              <input class="encryption_input" type="text" id="key2" placeholder="请输入密钥2" />
+              <input class="encryption_input" type="text" id="key3" placeholder="请输入密钥3" />
+      
+              <h4 class="encryption_label">IV向量</h4>
+              <input class="encryption_input" type="text" id="ivInput" placeholder="请输入16bit的IV" />
+
+              <h4 class="encryption_label">加密操作</h4>
+              <div class="border-button">
+                <div class="button-group">
+                  <a class="encryption_button" href="javascript:void(0)" id="singleEncrypt" onclick="singleEncryption()"><b>单次加密</b></a>
+                  <a class="encryption_button" href="javascript:void(0)" id="doubleEncrypt" onclick="doubleEncryption()"><b>双重加密</b></a>
+                  <a class="encryption_button" href="javascript:void(0)" id="tripleEncrypt" onclick="tripleEncryption()"><b>三重加密</b></a>
+                  <a class="encryption_button" href="javascript:void(0)" id="cbcEncrypt" onclick="cbcEncryption()"><b>CBC加密</b></a>
+                </div>
+              </div>
+      
+              <h4 class="encryption_label">生成的密文</h4>
+              <textarea class="encryption_ciphertext_textarea" id="ciphertextLabel" readonly></textarea>
+
+              
+              <!-- 新增解密按钮 -->
+              <h4 class="encryption_label">解密操作</h4>
+              <div class="border-button">
+                <div class="button-group">
+                  <a class="encryption_button" href="javascript:void(0)" id="singleDecrypt" onclick="singleDecryption()"><b>单次解密</b></a>
+                  <a class="encryption_button" href="javascript:void(0)" id="doubleDecrypt" onclick="doubleDecryption()"><b>双重解密</b></a>
+                  <a class="encryption_button" href="javascript:void(0)" id="tripleDecrypt" onclick="tripleDecryption()"><b>三重解密</b></a>
+                  <a class="encryption_button" href="javascript:void(0)" id="cbcDecrypt" onclick="cbcDecryption()"><b>CBC解密</b></a>
+                </div>
+              </div>
+              
+              <!-- 新增解密出的明文显示 -->
+              <h4 class="encryption_label">解密出的明文</h4>
+              <textarea class="encryption_plaintext_textarea" id="decryptedPlaintextLabel" readonly></textarea>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      
+
+
+
+
+
+      <div id="bruteForce" class="pricing-tables">
+        <div class="section-heading">
+          <div class="htmlpage-cell c114105">
+            <div>
+            </div>
+          </div>
+          <h4 id="iqy8wu" class="c138331">中间相遇攻击测试
+          </h4>
+        </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="pricing-item-regular"><span class="price">输入</span>
+              <h4>
+              </h4>
+              <div class="icon">
+              </div>
+              <h4>请输入明文
+              </h4>
+              <h4>注意：输入16bit
+              </h4>
+              <input type="text" id="message_plain" placeholder="请输入明文" />
+              <h4>
+              </h4>
+              <ul>
+                <li class="non-function">
+                </li>
+              </ul>
+              <div class="border-button">
+              </div>
+              <div class="border-button">
+                <a href="javascript:void(0)" id="in30bb" onclick = "">
+                  <b>确定</b></a>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-lg-4">
+          </div>
+          <div class="col-lg-4">
+            <div class="pricing-item-regular"><span class="price">输入</span>
+              <div class="icon">
+              </div>
+              <h4>
+              </h4>
+              <h4>请输入密文
+              </h4>
+              <h4>注意：输入16bit
+              </h4>
+              <input type="text" id="message_cipher" placeholder="请输入密文" />
+
+              <div class="border-button">
+                <a href="javascript:void(0)" id="in30bb" onclick = "mybruteForce()">
+                  <b>破解</b></a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-4">
+          </div>
+
+          <div class="col-lg-4">
+            <div class="pricing-item-regular"><span class="price">输出</span>
+              <h4>
+                <div id="globalVariableDisplay"></div>
+              </h4>
+              <h4>破解时间:
+              </h4>
+              <h4 id="result_time"></h4>
+              <div class="icon">
+              </div>
+              <h4>
+              </h4>
+              <h4>破解密钥:</h4>
+              <li id="result_key"></li>
+
+              <ul>
+                <li class="non-function">
+                </li>
+              </ul>
+              <div class="border-button">
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4">
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div id="about" class="about-us section">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-6 align-self-center">
+              <div class="section-heading">
+                <h4>关于
+                  <font color="#4b8ef1">我们是做什么的
+                  </font> &amp; 我们是谁
+                </h4><img src="/static/img/heading-line-dec.png" alt="" />
+                <p>我们是重庆大学的AES项目研究团队，专注于加密算法的实现与应用。团队由多位对信息安全充满热情的学生组成，致力于提升数据保护技术，为安全通信提供坚实的技术支持。
+                </p>
+              </div>
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="box-item">
+                    <h4><a href="#">算法实现</a></h4>
+                    <p>
+                    </p>
+                    <li>实现S-AES算法，提供加解密功能; 探索算法的优化与改进，提高性能和安全性。
+                    </li>
+                    <p>
+                    </p>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="box-item">
+                    <h4><a href="#">安全性分析</a></h4>
+                    <p>
+                    </p>
+                    <li>评估不同算法的安全性，分析潜在的攻击方式; 研究算法的混淆性与扩散性，确保加密强度
+                    </li>
+                    <p>
+                    </p>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="box-item">
+                    <h4><a href="#">应用开发</a></h4>
+                    <p>
+                    </p>
+                    <li>开发用户友好的软件工具，便于用户进行加解密操作; 提供详细的使用说明和技术支持。
+                    </li>
+                    <p>
+                    </p>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="box-item">
+                    <h4><a href="#">应用场景研究</a></h4>
+                    <li>
+                    </li>
+                    <li>研究加密算法在云计算、大数据、物联网等领域的应用需求； 开发适用于实际应用场景的加密解决方案。
+                    </li>
+                    <p>
+                    </p>
+                  </div>
+                </div>
+                <div class="col-lg-12">
+                  <p>我们的目标是研究并实现多种加密算法，包括S-AES、AES及其变体，深入探索其在信息安全中的应用潜力。通过理论与实践相结合，帮助团队成员及用户更好地理解加密机制。
+                  </p>
+                  <div class="gradient-button">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="right-image"><img src="/static/img/about-right-dec.png" alt="" /></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="clients" class="the-clients">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="naccs">
+                <div class="grid">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script src="/static/js/jquery.min.js"></script>
+      <script src="/static/js/bootstrap.bundle.min.js"></script>
+      <script src="/static/js/owl-carousel.js"></script>
+      <script src="/static/js/animation.js"></script>
+      <script src="/static/js/imagesloaded.js"></script>
+      <script src="/static/js/popup.js"></script>
+      <script src="/static/js/custom.js"></script>
+      <script src = "/static/js/encryption.js"></script>
+    </div>
+  </div>
+</body>
+
+</html>
