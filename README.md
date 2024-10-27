@@ -10,6 +10,23 @@
 
 ## 第一关-基本测试
 
+**目标**：测试 S-AES 算法的基础加密和解密功能，确保 GUI 界面能够支持用户的基本交互。
+
+**内容**：在此关卡中，要求用户输入 16 bit 的明文数据和 16 bit 的密钥。系统需展示 S-AES 算法的基本加密和解密操作。
+
+**测试步骤**：
+1. 输入明文为 `1010101010101010`。
+2. 输入密钥为 `1100110011001100`。
+3. 点击“加密”按钮，系统生成对应的密文（如下图所示）。
+4. 使用相同的密钥对密文进行解密，验证解密后的明文是否与初始明文一致。
+
+**结果**：系统成功生成密文并正确解密回原始明文。
+![](images/综合加解密模块.png)
+![](images/task1.png)
+
+
+
+
 ## 第二关-交叉测试
 
 ## 第三关-扩展功能
@@ -50,6 +67,28 @@
 项目代码结构如下:
 
 ```
+├── .git
+├── .idea
+├── app.py
+├── DoubleSAES.py
+├── GF2N.py
+├── images
+├── loginSQL.py
+├── README.md
+├── SAES.py
+├── SBoxBuild.py
+├── static
+├── StringSAES.py
+├── templates
+│   ├── error.html
+│   ├── index.html
+│   ├── system.html
+│   └── user-register.html
+├── tree.py
+├── TripleEncryption.py
+├── TripleSAES.py
+├── utils.py
+└── __pycache__
 
 ```
 
