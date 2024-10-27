@@ -133,7 +133,7 @@
 
 修改密文分组：
 
-![](images/Modify-the-ciphertext.png)
+![](images/modify-ciphertext.png)
 
 
 **结果**：系统能够正确生成 CBC 加密的密文，且当分组被修改后，链式依赖导致解密明文相应变化，验证 CBC 模式的安全性。
